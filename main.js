@@ -26,12 +26,6 @@ function startMigration(selectedStatus) {
   
   const badge = document.getElementById('statusBadge');
   const progressBar = document.getElementById('progressBar');
-  const auditLogRow = document.getElementById('auditLogRow');
-  const auditLogLink = document.getElementById('auditLogLink');
-  
-  // Hide audit log by default
-  auditLogRow.style.display = 'none';
-  
   const endTimeRow = document.getElementById('endTimeRow');
   const endTimeValue = document.getElementById('endTimeValue');
   
@@ -55,13 +49,6 @@ function startMigration(selectedStatus) {
     // Show end time
     endTimeValue.textContent = '2026-02-02 14:15:00';
     endTimeRow.style.display = '';
-    
-    // Show audit log download link
-    const timestamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '_').split('.')[0];
-    const batchId = 'B' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    auditLogLink.textContent = `MigrationAudit_${timestamp}_${batchId}.csv`;
-    auditLogLink.href = '#';
-    auditLogRow.style.display = '';
     
   } else if (selectedStatus === 'running') {
     badge.textContent = 'RUNNING';
