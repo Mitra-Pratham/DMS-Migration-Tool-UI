@@ -1,23 +1,132 @@
-// Toggle migration dropdown
-function toggleMigrationDropdown() {
-  const dropdown = document.getElementById('migrationDropdown');
-  dropdown.classList.toggle('hidden');
+// Job State Management
+// Possible states: IDLE, SCHEDULED, RUNNING, COMPLETED, STOPPED
+let currentJobState = 'IDLE';
+
+// Update button states based on job state
+function updateButtonStates() {
+  const btnStart = document.getElementById('btnStartMigration');
+  const btnStop = document.getElementById('btnStopMigration');
+  const btnDryRun = document.getElementById('btnDryRun');
+  const jobStateDisplay = document.getElementById('jobStateDisplay');
+  
+  jobStateDisplay.textContent = currentJobState;
+  
+  if (currentJobState === 'RUNNING' || currentJobState === 'SCHEDULED') {
+    // When EXECUTING or SCHEDULED: Start disabled, Dry Run disabled, Stop enabled
+    btnStart.disabled = true;
+    btnDryRun.disabled = true;
+    btnStop.disabled = false;
+  } else {
+    // When IDLE, COMPLETED, or STOPPED: Start enabled, Dry Run enabled, Stop disabled
+    btnStart.disabled = false;
+    btnDryRun.disabled = false;
+    btnStop.disabled = true;
+  }
 }
 
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('migrationDropdown');
-  const button = e.target.closest('button[onclick="toggleMigrationDropdown()"]');
-  if (!button && !dropdown.contains(e.target)) {
-    dropdown.classList.add('hidden');
-  }
-});
-
-// Start Migration and show all fields based on selected status
-function startMigration(selectedStatus) {
-  // Hide dropdown
-  document.getElementById('migrationDropdown').classList.add('hidden');
+// Show sticky banner alert
+function showBannerAlert(message, type = 'info') {
+  const banner = document.getElementById('bannerAlert');
+  const bannerIcon = document.getElementById('bannerIcon');
+  const bannerMessage = document.getElementById('bannerMessage');
   
+  // Reset classes - keep sticky positioning
+  banner.className = 'sticky top-0 z-50 border-b px-4 py-3 flex items-center justify-center';
+  
+  if (type === 'success') {
+    banner.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+    bannerIcon.textContent = '✓';
+  } else if (type === 'error') {
+    banner.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+    bannerIcon.textContent = '✕';
+  } else if (type === 'warning') {
+    banner.classList.add('bg-amber-50', 'border-amber-200', 'text-amber-800');
+    bannerIcon.textContent = '⚠';
+  } else {
+    banner.classList.add('bg-blue-50', 'border-blue-200', 'text-blue-800');
+    bannerIcon.textContent = 'ℹ';
+  }
+  
+  bannerMessage.textContent = message;
+  banner.classList.remove('hidden');
+}
+
+// Hide sticky banner alert
+function hideBannerAlert() {
+  document.getElementById('bannerAlert').classList.add('hidden');
+}
+
+// Show Start Migration confirmation modal
+function showStartConfirmation() {
+  document.getElementById('startConfirmModal').classList.remove('hidden');
+}
+
+// Hide Start Migration confirmation modal
+function hideStartConfirmation() {
+  document.getElementById('startConfirmModal').classList.add('hidden');
+}
+
+// Confirm Start Migration
+function confirmStartMigration() {
+  hideStartConfirmation();
+  
+  // Simulate saving configuration and calling backend
+  currentJobState = 'SCHEDULED';
+  updateButtonStates();
+  showBannerAlert('Migration scheduled', 'success');
+  
+  // Show migration status section
+  showMigrationStatus('scheduled');
+  
+  // Simulate backend response - transition to EXECUTING after 2 seconds
+  setTimeout(() => {
+    currentJobState = 'RUNNING';
+    updateButtonStates();
+    showBannerAlert('Migration is now executing...', 'info');
+    showMigrationStatus('running');
+    
+    // Transition to COMPLETED after 10 seconds
+    setTimeout(() => {
+      currentJobState = 'COMPLETED';
+      updateButtonStates();
+      showBannerAlert('Migration completed successfully!', 'success');
+      showMigrationStatus('completed');
+    }, 10000);
+  }, 2000);
+}
+
+// Show Stop Migration confirmation modal
+function showStopConfirmation() {
+  document.getElementById('stopConfirmModal').classList.remove('hidden');
+}
+
+// Hide Stop Migration confirmation modal
+function hideStopConfirmation() {
+  document.getElementById('stopConfirmModal').classList.add('hidden');
+}
+
+// Confirm Stop Migration
+function confirmStopMigration() {
+  hideStopConfirmation();
+  
+  // Simulate calling backend stop endpoint
+  currentJobState = 'STOPPED';
+  updateButtonStates();
+  showBannerAlert('Migration stopped', 'warning');
+  
+  // Update migration status to show stopped state
+  showMigrationStatus('stopped');
+}
+
+// Refresh status (reloads from DB/system settings)
+function refreshStatus() {
+  showBannerAlert('Refreshing status...', 'info');
+  // In a real app, this would call the backend to get current status
+  updateButtonStates();
+}
+
+// Show Migration Status with different states
+function showMigrationStatus(state) {
   const statusSection = document.getElementById('migrationStatus');
   statusSection.style.display = 'block';
   
@@ -36,47 +145,48 @@ function startMigration(selectedStatus) {
   // Hide end time by default
   endTimeRow.style.display = 'none';
   
-  if (selectedStatus === 'success') {
-    badge.textContent = 'SUCCESS';
-    badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700';
-    progressBar.style.width = '100%';
-    progressBar.textContent = '100%';
+  if (state === 'scheduled') {
+    badge.textContent = 'SCHEDULED';
+    badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-700';
+    progressBar.style.width = '0%';
+    progressBar.textContent = '0%';
     progressBar.className = 'h-full bg-emerald-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+    document.getElementById('statusMessageValue').textContent = 'Migration scheduled, waiting to start...';
     
-    // Update all fields to show completion
-    document.getElementById('processedValue').textContent = '1100 / 1100';
-    document.getElementById('batchValue').textContent = '22 of 22';
-    document.getElementById('successValue').textContent = '1095';
-    document.getElementById('failedValue').textContent = '5';
-    document.getElementById('statusMessageValue').textContent = 'Migration completed successfully.';
-    
-    // Show end time
-    endTimeValue.textContent = '2026-02-02 14:15:00';
-    endTimeRow.style.display = '';
-    
-  } else if (selectedStatus === 'running') {
+  } else if (state === 'running') {
     badge.textContent = 'RUNNING';
     badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-700';
     progressBar.style.width = '45%';
     progressBar.textContent = '45%';
     progressBar.className = 'h-full bg-emerald-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+    document.getElementById('processedValue').textContent = '495 / 1100';
+    document.getElementById('batchValue').textContent = '10 of 22';
+    document.getElementById('successValue').textContent = '490';
+    document.getElementById('failedValue').textContent = '5';
+    document.getElementById('statusMessageValue').textContent = 'Processing batch 10 of 22...';
     
-  } else if (selectedStatus === 'failed') {
-    badge.textContent = 'FAILED';
-    badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-700';
-    progressBar.style.width = '67%';
-    progressBar.textContent = '67%';
-    progressBar.className = 'h-full bg-red-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+  } else if (state === 'stopped') {
+    badge.textContent = 'STOPPED';
+    badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-amber-100 text-amber-700';
+    progressBar.style.width = '45%';
+    progressBar.textContent = '45%';
+    progressBar.className = 'h-full bg-amber-500 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+    document.getElementById('statusMessageValue').textContent = 'Migration stopped by user.';
+    endTimeValue.textContent = new Date().toISOString().replace('T', ' ').substring(0, 19);
+    endTimeRow.style.display = '';
     
-    // Update fields to show failure state
-    document.getElementById('processedValue').textContent = '737 / 1100';
-    document.getElementById('batchValue').textContent = '15 of 22';
-    document.getElementById('successValue').textContent = '720';
-    document.getElementById('failedValue').textContent = '17';
-    document.getElementById('statusMessageValue').textContent = 'Migration failed: Connection timeout on batch 15.';
-    
-    // Show end time
-    endTimeValue.textContent = '2026-02-02 12:45:00';
+  } else if (state === 'completed') {
+    badge.textContent = 'COMPLETED';
+    badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700';
+    progressBar.style.width = '100%';
+    progressBar.textContent = '100%';
+    progressBar.className = 'h-full bg-emerald-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+    document.getElementById('processedValue').textContent = '1100 / 1100';
+    document.getElementById('batchValue').textContent = '22 of 22';
+    document.getElementById('successValue').textContent = '1095';
+    document.getElementById('failedValue').textContent = '5';
+    document.getElementById('statusMessageValue').textContent = 'Migration completed successfully.';
+    endTimeValue.textContent = '2026-02-02 14:15:00';
     endTimeRow.style.display = '';
   }
   
@@ -110,6 +220,19 @@ function runDryRun() {
   progressBar.className = 'h-full bg-emerald-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
   
   status.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Toggle Advanced Filtering (Scheduling section)
+function toggleAdvancedFiltering() {
+  const section = document.getElementById('schedulingSection');
+  const icon = document.getElementById('advancedFilteringIcon');
+  if (section.style.display === 'none') {
+    section.style.display = 'block';
+    icon.textContent = '−';
+  } else {
+    section.style.display = 'none';
+    icon.textContent = '+';
+  }
 }
 
 // Toggle project selector visibility based on Project checkbox
