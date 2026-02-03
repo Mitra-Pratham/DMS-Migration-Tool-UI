@@ -32,12 +32,29 @@ function startMigration(selectedStatus) {
   // Hide audit log by default
   auditLogRow.style.display = 'none';
   
+  const endTimeRow = document.getElementById('endTimeRow');
+  const endTimeValue = document.getElementById('endTimeValue');
+  
+  // Hide end time by default
+  endTimeRow.style.display = 'none';
+  
   if (selectedStatus === 'success') {
     badge.textContent = 'SUCCESS';
     badge.className = 'inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700';
     progressBar.style.width = '100%';
     progressBar.textContent = '100%';
     progressBar.className = 'h-full bg-emerald-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+    
+    // Update all fields to show completion
+    document.getElementById('processedValue').textContent = '1100 / 1100';
+    document.getElementById('batchValue').textContent = '22 of 22';
+    document.getElementById('successValue').textContent = '1095';
+    document.getElementById('failedValue').textContent = '5';
+    document.getElementById('statusMessageValue').textContent = 'Migration completed successfully.';
+    
+    // Show end time
+    endTimeValue.textContent = '2026-02-02 14:15:00';
+    endTimeRow.style.display = '';
     
     // Show audit log download link
     const timestamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '_').split('.')[0];
@@ -59,6 +76,17 @@ function startMigration(selectedStatus) {
     progressBar.style.width = '67%';
     progressBar.textContent = '67%';
     progressBar.className = 'h-full bg-red-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white';
+    
+    // Update fields to show failure state
+    document.getElementById('processedValue').textContent = '737 / 1100';
+    document.getElementById('batchValue').textContent = '15 of 22';
+    document.getElementById('successValue').textContent = '720';
+    document.getElementById('failedValue').textContent = '17';
+    document.getElementById('statusMessageValue').textContent = 'Migration failed: Connection timeout on batch 15.';
+    
+    // Show end time
+    endTimeValue.textContent = '2026-02-02 12:45:00';
+    endTimeRow.style.display = '';
   }
   
   statusSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
