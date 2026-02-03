@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMS Migration Tool (Prototype)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-900">
+  <!-- Top header -->
+  <header class="bg-white border-b">
+    <div class="mx-auto max-w-[1700px] px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="text-2xl font-extrabold tracking-tight">
+          <span class="text-red-700">Team</span><span class="text-slate-500">Connect</span>
+        </div>
+        <span class="text-slate-400">|</span>
+        <span class="text-slate-700 font-medium">Legal</span>
+      </div>
+
+      <!-- Search -->
+      <div class="hidden md:flex items-center gap-2 w-[560px]">
+        <div class="relative w-40">
+          <select class="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm">
+            <option>All</option>
+            <option>Projects</option>
+            <option>Contacts</option>
+            <option>Documents</option>
+          </select>
+        </div>
+        <div class="relative flex-1">
+          <input class="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 pr-10 text-sm placeholder:text-slate-400"
+                 placeholder="Search" />
+          <button class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-700" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8.5 3a5.5 5.5 0 104.06 9.22l2.61 2.61a1 1 0 001.42-1.42l-2.61-2.61A5.5 5.5 0 008.5 3zm-3.5 5.5a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right icons -->
+      <div class="hidden lg:flex items-center gap-5 text-slate-600">
+        <button class="flex flex-col items-center text-xs hover:text-slate-800">
+          <span class="text-lg leading-none">★</span>
+          Bookmarks
+        </button>
+        <button class="flex flex-col items-center text-xs hover:text-slate-800">
+          <span class="text-lg leading-none">⟳</span>
+          Recent
+        </button>
+        <button class="flex flex-col items-center text-xs hover:text-slate-800">
+          <span class="text-lg leading-none">≡</span>
+          All
+        </button>
+        <button class="flex flex-col items-center text-xs hover:text-slate-800">
+          <span class="text-lg leading-none">▦</span>
+          Tools
+        </button>
+        <button class="flex flex-col items-center text-xs hover:text-slate-800">
+          <span class="text-lg leading-none">?</span>
+          Help
+        </button>
+        <button class="flex flex-col items-center text-xs hover:text-slate-800" aria-label="Setup">
+          <span class="text-lg leading-none">⚙</span>
+          Setup
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-sm font-semibold">S</div>
+          <span class="text-sm">satya</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary nav -->
+  <nav class="bg-[#0a3d68] text-white">
+    <div class="mx-auto max-w-[1700px] px-4 h-12 flex items-center gap-6">
+      <button class="p-2 hover:bg-white/10 rounded-md" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+        </svg>
+      </button>
+      <div class="flex items-center gap-6 text-sm font-semibold tracking-wide">
+        <a href="#" class="hover:underline">Home</a>
+        <a href="#" class="hover:underline">Legal</a>
+        <a href="#" class="hover:underline">Finance</a>
+        <a href="#" class="hover:underline">Contacts</a>
+        <a href="#" class="hover:underline">Calendar</a>
+        <a href="#" class="hover:underline">Documents</a>
+        <a href="#" class="hover:underline">Reports</a>
+        <a href="#" class="hover:underline">Search</a>
+        <a href="#" class="hover:underline">TAP</a>
+        <a href="#" class="hover:underline">Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page -->
+  <main class="mx-auto max-w-[1700px] px-4 py-6">
+    <div class="bg-white border rounded-lg overflow-hidden">
+      <div class="bg-slate-50 border-b px-5 py-3">
+        <h1 class="text-lg font-medium text-slate-800">DMS Migration Tool</h1>
+      </div>
+
+      <div class="px-6 py-6">
+        <!-- Configuration -->
+        <section>
+          <h2 class="text-base font-semibold text-slate-800">Configuration</h2>
+
+          <div class="mt-5 flex items-center gap-4 text-sm">
+            <div class="w-44 font-semibold text-slate-600">Target DMS:</div>
+            <a href="#" class="text-blue-600 hover:underline font-semibold">SharePoint Connector</a>
+            <span class="text-slate-500">(Default DMS Connector)</span>
+          </div>
+
+        </section>
+
+        <div class="my-8 border-t"></div>
+
+        <!-- Filter Configuration -->
+        <section>
+          <h2 class="text-base font-semibold text-slate-800">Filter Configuration</h2>
+          <p class="mt-2 text-sm text-slate-600">
+            Configure filter criteria for which documents should be migrated to the default DMS connector.
+            Filter settings are saved and persist across server restarts.
+          </p>
+
+          <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-5">
+            <div class="flex items-center gap-4">
+              <label class="w-48 text-sm font-semibold text-slate-700">Max File Size (bytes):</label>
+              <input class="h-10 w-72 rounded border border-slate-300 bg-white px-3 text-sm placeholder:text-slate-400" placeholder="Leave empty for no limit" />
+            </div>
+
+            <div class="flex items-center gap-4">
+              <label class="w-48 text-sm font-semibold text-slate-700">Min File Size (bytes):</label>
+              <input class="h-10 w-72 rounded border border-slate-300 bg-white px-3 text-sm placeholder:text-slate-400" placeholder="Leave empty for no limit" />
+            </div>
+
+            <div class="flex items-center gap-4">
+              <label class="w-48 text-sm font-semibold text-slate-700">Allowed Extensions:</label>
+              <input class="h-10 w-72 rounded border border-slate-300 bg-white px-3 text-sm placeholder:text-slate-400" placeholder="e.g., pdf,doc,docx" />
+            </div>
+
+            <div class="flex items-center gap-4">
+              <label class="w-48 text-sm font-semibold text-slate-700">Skip Checked Out Documents:</label>
+              <input type="checkbox" checked class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+            </div>
+
+            <div class="flex items-center gap-4">
+              <label class="w-48 text-sm font-semibold text-slate-700">Include Version History:</label>
+              <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+            </div>
+          </div>
+
+          <div class="mt-8 border-t pt-6">
+            <h3 class="text-sm font-semibold text-slate-800">Document Types</h3>
+            <div class="mt-4 flex flex-wrap items-center gap-6">
+              <div class="w-48 text-sm font-semibold text-slate-700">Document Types:</div>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" checked class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>File (L)</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>History (T)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-8 border-t pt-6">
+            <h3 class="text-sm font-semibold text-slate-800">Date Range Filter</h3>
+            <div class="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-5">
+              <div class="flex items-center gap-4">
+                <label class="w-48 text-sm font-semibold text-slate-700">Date Field:</label>
+                <select class="h-10 w-72 rounded border border-slate-300 bg-white px-3 text-sm">
+                  <option>Created On</option>
+                  <option selected>Modified On</option>
+                  <option>Author Date</option>
+                  <option>Checked In On</option>
+                </select>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <label class="w-48 text-sm font-semibold text-slate-700">From Date:</label>
+                <input type="date" class="h-10 w-72 rounded border border-slate-300 bg-white px-3 text-sm" value="2025-01-01" />
+              </div>
+
+              <div class="flex items-center gap-4">
+                <label class="w-48 text-sm font-semibold text-slate-700">To Date:</label>
+                <input type="date" class="h-10 w-72 rounded border border-slate-300 bg-white px-3 text-sm" value="2026-02-02" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 border-t pt-6">
+            <h3 class="text-sm font-semibold text-slate-800">Object Types</h3>
+            <p class="mt-2 text-sm text-slate-600">Select owning object types. Leave empty to include all.</p>
+            <div class="mt-4 flex flex-wrap gap-6 text-sm">
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" id="projectCheckbox" checked class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="toggleProjectSelector()" />
+                <span>Project</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" checked class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Contact</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Account</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Invoice</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Appointment</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Expense</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Task</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
+                <span>Milestone</span>
+              </label>
+            </div>
+
+            <!-- Project Hierarchy Selector -->
+            <div id="projectSelector" class="mt-4 rounded-lg border border-slate-300 bg-white p-4 max-w-2xl">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-semibold text-slate-700">Select Projects</span>
+                <div class="flex gap-2">
+                  <button type="button" onclick="selectAllProjects()" class="text-xs text-blue-600 hover:underline">Select All</button>
+                  <span class="text-slate-300">|</span>
+                  <button type="button" onclick="deselectAllProjects()" class="text-xs text-blue-600 hover:underline">Deselect All</button>
+                </div>
+              </div>
+              <div class="max-h-64 overflow-y-auto border rounded bg-slate-50 p-3">
+
+                <!-- Advanced Docket Management -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>Advanced Docket Management</span>
+                  </label>
+                </div>
+
+                <!-- Advice Requests -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>Advice Requests</span>
+                  </label>
+                </div>
+
+                <!-- AP Settings -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>AP Settings</span>
+                  </label>
+                </div>
+
+                <!-- ARIES -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>ARIES</span>
+                  </label>
+                </div>
+
+                <!-- ARIES Feedback -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>ARIES Feedback</span>
+                  </label>
+                </div>
+
+                <!-- ARIES Settings -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>ARIES Settings</span>
+                  </label>
+                </div>
+
+                <!-- Billing Profile -->
+                <div class="flex items-center gap-2 py-1">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateSelectedCount()" />
+                    <span>Billing Profile</span>
+                  </label>
+                </div>
+
+                <!-- Budget Settings -->
+                <div class="project-group">
+                  <div class="flex items-center gap-2 py-1">
+                    <button type="button" onclick="toggleExpand(this)" class="w-5 h-5 flex items-center justify-center text-slate-500 hover:text-slate-700">
+                      <svg class="w-4 h-4 transform transition-transform" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <label class="inline-flex items-center gap-2 text-sm">
+                      <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="toggleParent(this)" />
+                      <span class="font-medium">Budget Settings</span>
+                    </label>
+                  </div>
+                  <div class="children ml-7 border-l border-slate-200 pl-3">
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>Budget Template</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>Condition Budget Template Mapping</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>Fiscal Year</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Budget Test -->
+                <div class="project-group mt-2">
+                  <div class="flex items-center gap-2 py-1">
+                    <button type="button" onclick="toggleExpand(this)" class="w-5 h-5 flex items-center justify-center text-slate-500 hover:text-slate-700">
+                      <svg class="w-4 h-4 transform transition-transform" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <label class="inline-flex items-center gap-2 text-sm">
+                      <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="toggleParent(this)" />
+                      <span class="font-medium">Budget Test</span>
+                    </label>
+                  </div>
+                  <div class="children ml-7 border-l border-slate-200 pl-3">
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>BT Involved Party</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cat Matter -->
+                <div class="project-group mt-2">
+                  <div class="flex items-center gap-2 py-1">
+                    <button type="button" onclick="toggleExpand(this)" class="w-5 h-5 flex items-center justify-center text-slate-500 hover:text-slate-700">
+                      <svg class="w-4 h-4 transform transition-transform" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <label class="inline-flex items-center gap-2 text-sm">
+                      <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="toggleParent(this)" />
+                      <span class="font-medium">Cat Matter</span>
+                    </label>
+                  </div>
+                  <div class="children ml-7 border-l border-slate-200 pl-3">
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>Cat Involved</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>CatMatter Child</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>CatMatterEmb</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>CatMatterEmbeded</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>Document Request</span>
+                      </label>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                      <label class="inline-flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="project-checkbox h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" onchange="updateParentState(this)" />
+                        <span>Extra Costs</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-2 text-xs text-slate-500">
+                <span id="selectedProjectCount">0</span> project(s) selected
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 rounded-lg border bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <span class="font-semibold">Note:</span> System documents are automatically excluded.
+          </div>
+
+          <div class="mt-6 flex gap-3">
+            <button class="h-10 rounded bg-[#2b7da6] px-5 text-white text-sm font-semibold shadow-sm hover:bg-[#256e92]">Save</button>
+            <button class="h-10 rounded border border-slate-300 bg-white px-5 text-slate-700 text-sm font-semibold shadow-sm hover:bg-slate-50">Reset to Default</button>
+          </div>
+        </section>
+
+        <div class="my-8 border-t"></div>
+
+        <!-- Migration Actions -->
+        <section>
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="relative">
+              <button onclick="toggleMigrationDropdown()" class="h-10 rounded bg-[#2b7da6] px-4 text-white text-sm font-semibold shadow-sm hover:bg-[#256e92] flex items-center gap-2">
+                Start Migration
+                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              </button>
+              <div id="migrationDropdown" class="absolute left-0 bottom-full mb-1 w-40 rounded-md border bg-white shadow-lg z-10 hidden">
+                <button onclick="startMigration('success')" class="w-full px-4 py-2 text-left text-sm hover:bg-slate-100 text-emerald-700 font-medium">Success</button>
+                <button onclick="startMigration('running')" class="w-full px-4 py-2 text-left text-sm hover:bg-slate-100 text-blue-700 font-medium">Running</button>
+                <button onclick="startMigration('failed')" class="w-full px-4 py-2 text-left text-sm hover:bg-slate-100 text-red-700 font-medium">Failed</button>
+              </div>
+            </div>
+            <button onclick="runDryRun()" class="h-10 rounded bg-slate-600 px-4 text-white text-sm font-semibold shadow-sm hover:bg-slate-700">Dry Run</button>
+            <button class="h-10 rounded bg-slate-600 px-4 text-white text-sm font-semibold shadow-sm hover:bg-slate-700">Refresh</button>
+          </div>
+        </section>
+
+        <!-- Migration Status -->
+        <section id="migrationStatus" class="mt-6" style="display: none;">
+          <h2 class="text-base font-semibold text-slate-800">Migration Status</h2>
+
+          <div class="mt-4 rounded-lg border bg-white">
+            <table class="w-full text-sm table-fixed">
+              <colgroup>
+                <col class="w-1/5" />
+                <col class="w-4/5" />
+              </colgroup>
+              <tbody class="divide-y">
+                <tr id="statusRow" class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Status</td>
+                  <td class="px-4 py-3 text-slate-700">
+                    <span id="statusBadge" class="inline-flex items-center rounded px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-700">RUNNING</span>
+                  </td>
+                </tr>
+                <tr id="progressRow" class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Progress</td>
+                  <td class="px-4 py-3 text-slate-700">
+                    <div class="h-5 w-full rounded bg-slate-200 overflow-hidden">
+                      <div id="progressBar" class="h-full bg-emerald-600 transition-all duration-300 flex items-center justify-center text-xs font-semibold text-white" style="width: 45%">45%</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Total Documents</td>
+                  <td class="px-4 py-3 text-slate-700">1,250</td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Documents to Migrate</td>
+                  <td class="px-4 py-3 text-slate-700">1,100</td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Documents to Skip</td>
+                  <td class="px-4 py-3 text-slate-700">50</td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Already Externalized</td>
+                  <td class="px-4 py-3 text-slate-700">100</td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Total Size</td>
+                  <td class="px-4 py-3 text-slate-700">2.5 GB</td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Estimated Duration</td>
+                  <td class="px-4 py-3 text-slate-700">3 hours 45 minutes</td>
+                </tr>
+                <tr id="processedRow" class="divide-x runtime-field">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Processed</td>
+                  <td class="px-4 py-3 text-slate-700">495 / 1100</td>
+                </tr>
+                <tr id="batchRow" class="divide-x runtime-field">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Batch</td>
+                  <td class="px-4 py-3 text-slate-700">10 of 22</td>
+                </tr>
+                <tr id="successRow" class="divide-x runtime-field">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Success</td>
+                  <td class="px-4 py-3 text-emerald-700 font-semibold">490</td>
+                </tr>
+                <tr id="failedRow" class="divide-x runtime-field">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Failed</td>
+                  <td class="px-4 py-3 text-red-700 font-semibold">5</td>
+                </tr>
+                <tr id="statusMessageRow" class="divide-x runtime-field">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Status Message</td>
+                  <td class="px-4 py-3 text-slate-700">Processing batch 10 of 22...</td>
+                </tr>
+                <tr id="startTimeRow" class="divide-x runtime-field">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Start Time</td>
+                  <td class="px-4 py-3 text-slate-700">2026-02-02 10:30:00</td>
+                </tr>
+                <tr class="divide-x">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Initiated By</td>
+                  <td class="px-4 py-3 text-slate-700">admin@example.com</td>
+                </tr>
+                <tr id="auditLogRow" class="divide-x" style="display: none;">
+                  <td class="px-4 py-3 font-semibold text-slate-700">Download Audit Log</td>
+                  <td class="px-4 py-3 text-slate-700">
+                    <a id="auditLogLink" href="#" class="text-blue-600 hover:underline font-medium"></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="py-10"></footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
