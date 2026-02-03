@@ -24,6 +24,10 @@ function startMigration(selectedStatus) {
   // Show all fields including runtime fields
   document.querySelectorAll('.runtime-field').forEach(el => el.style.display = '');
   
+  // Show Quarantined Documents to Migrate, hide Quarantined Documents (dry run only)
+  document.getElementById('quarantinedToMigrateRow').style.display = '';
+  document.getElementById('quarantinedDocsRow').style.display = 'none';
+  
   const badge = document.getElementById('statusBadge');
   const progressBar = document.getElementById('progressBar');
   const endTimeRow = document.getElementById('endTimeRow');
@@ -87,8 +91,12 @@ function runDryRun() {
   // Hide runtime-only elements for dry run preview
   document.querySelectorAll('.runtime-field').forEach(el => el.style.display = 'none');
   
-  // Hide audit log row
-  document.getElementById('auditLogRow').style.display = 'none';
+  // Show Quarantined Documents, hide Quarantined Documents to Migrate (migration only)
+  document.getElementById('quarantinedDocsRow').style.display = '';
+  document.getElementById('quarantinedToMigrateRow').style.display = 'none';
+  
+  // Hide end time for dry run
+  document.getElementById('endTimeRow').style.display = 'none';
   
   // Set status badge to Dry Run Mode
   const badge = document.getElementById('statusBadge');
